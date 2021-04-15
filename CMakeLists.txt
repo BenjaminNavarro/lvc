@@ -17,6 +17,10 @@ include(CheckIncludeFileCXX)
 
 # ---- Declare library ----
 
+if(MSVC)
+  set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS TRUE)
+endif()
+
 add_library(
     llc_llc
     include/llc/Compiler.h
