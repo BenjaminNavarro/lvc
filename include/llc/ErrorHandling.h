@@ -15,6 +15,7 @@
 #define LLC_SUPPORT_ERRORHANDLING_H
 
 #include "llc/Compiler.h"
+#include "llc/DataTypes.h"
 #include <string>
 
 namespace llc {

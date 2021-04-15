@@ -20,6 +20,7 @@ include(CheckIncludeFileCXX)
 add_library(
     llc_llc
     include/llc/Compiler.h
+    include/llc/DataTypes.h
     include/llc/ErrorHandling.h
     include/llc/iterator_range.h
     include/llc/llc.h
