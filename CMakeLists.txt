@@ -56,7 +56,7 @@ target_include_directories(
     "$<INSTALL_INTERFACE:include/llc>"
 )
 
-target_compile_features(llc_llc PUBLIC cxx_std_11)
+target_compile_features(llc_llc PUBLIC cxx_std_14)
 
 # ---- Install rules ----
 
