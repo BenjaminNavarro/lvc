@@ -10,7 +10,7 @@ if(PROJECT_IS_TOP_LEVEL)
   enable_testing()
 endif()
 
-find_package(GTest)
+find_package(GTest REQUIRED)
 
 add_executable(
   llc_test 

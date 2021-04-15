@@ -1,14 +1,9 @@
-if(PROJECT_IS_TOP_LEVEL)
-  set(CMAKE_INSTALL_INCLUDEDIR include/llc CACHE PATH "")
-endif()
-
 include(CMakePackageConfigHelpers)
 include(GNUInstallDirs)
 
 install(
     DIRECTORY
     "${PROJECT_SOURCE_DIR}/include/"
-    "${PROJECT_BINARY_DIR}/include/"
     DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
     COMPONENT llc_Development
 )
