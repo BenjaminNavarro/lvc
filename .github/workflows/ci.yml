@@ -3,11 +3,11 @@ name: Continuous Integration
 on:
   push:
     branches:
-    - master
+      - master
 
   pull_request:
     branches:
-    - master
+      - master
 
 jobs:
   test:
@@ -18,24 +18,31 @@ jobs:
         type: [shared, static]
 
         include:
-        - { type: shared, shared: YES }
-        - { type: static, shared: NO }
+          - { type: shared, shared: YES }
+          - { type: static, shared: NO }
 
     runs-on: ${{ matrix.os }}-latest
 
     steps:
-    - uses: actions/checkout@v1
+      - uses: actions/checkout@v1
 
-    - name: Configure
-      run: cmake --preset=ci-${{ matrix.os }}
-        -D BUILD_SHARED_LIBS=${{ matrix.shared }}
+      - name: Get Conan
+        uses: turtlebrowser/get-conan@v1.0
 
-    - name: Build
-      run: cmake --build build --config Release -j 2
+      - name: Get dependencies
+        run: conan install . --build=missing -o testing=True
 
-    - name: Install
-      run: cmake --install build --config Release --prefix prefix
+      - name: Configure
+        run: cmake --preset=ci-${{ matrix.os }}
+          -D BUILD_SHARED_LIBS=${{ matrix.shared }}
+          -D CMAKE_MODULE_PATH=${{ github.workspace }}
 
-    - name: Test
-      working-directory: build
-      run: ctest -C Release -j 2
+      - name: Build
+        run: cmake --build build --config Release -j 2
+
+      - name: Install
+        run: cmake --install build --config Release --prefix prefix
+
+      - name: Test
+        working-directory: build
+        run: ctest -C Release -j 2
