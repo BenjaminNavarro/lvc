@@ -17,7 +17,7 @@ add_executable(
   source/main.cpp
   source/SmallVectorTest.cpp
 )
-target_link_libraries(llc_test PRIVATE llc::llc gtest)
+target_link_libraries(llc_test PRIVATE llc::llc GTest::gtest)
 target_compile_features(llc_test PRIVATE cxx_std_11)
 
 add_test(NAME llc_test COMMAND llc_test)
