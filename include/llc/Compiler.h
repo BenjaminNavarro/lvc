@@ -1,6 +1,31 @@
 #ifndef LLC_COMPILER_H
 #define LLC_COMPILER_H
 
+#ifdef __cplusplus
+#include <new>
+#endif
+#include <stddef.h>
+
+#if defined(_MSC_VER)
+#include <sal.h>
+#endif
+
+#ifndef __has_feature
+# define __has_feature(x) 0
+#endif
+
+#ifndef __has_extension
+# define __has_extension(x) 0
+#endif
+
+#ifndef __has_attribute
+# define __has_attribute(x) 0
+#endif
+
+#ifndef __has_builtin
+# define __has_builtin(x) 0
+#endif
+
 /// \macro LLC_GNUC_PREREQ
 /// Extend the default __GNUC_PREREQ even if glibc's features.h isn't
 /// available.
