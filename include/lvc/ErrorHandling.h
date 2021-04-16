@@ -11,14 +11,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLC_SUPPORT_ERRORHANDLING_H
-#define LLC_SUPPORT_ERRORHANDLING_H
+#ifndef LVC_SUPPORT_ERRORHANDLING_H
+#define LVC_SUPPORT_ERRORHANDLING_H
 
-#include "llc/Compiler.h"
-#include "llc/DataTypes.h"
+#include "lvc/Compiler.h"
+#include "lvc/DataTypes.h"
 #include <string>
 
-namespace llc {
+namespace lvc {
 class StringRef;
 class Twine;
 
@@ -69,13 +69,13 @@ struct ScopedFatalErrorHandler {
 /// standard error, followed by a newline.
 /// After the error handler is called this function will call abort(), it
 /// does not return.
-LLC_ATTRIBUTE_NORETURN void report_fatal_error(const char *reason,
+LVC_ATTRIBUTE_NORETURN void report_fatal_error(const char *reason,
                                                bool gen_crash_diag = true);
-LLC_ATTRIBUTE_NORETURN void report_fatal_error(const std::string &reason,
+LVC_ATTRIBUTE_NORETURN void report_fatal_error(const std::string &reason,
                                                bool gen_crash_diag = true);
-LLC_ATTRIBUTE_NORETURN void report_fatal_error(StringRef reason,
+LVC_ATTRIBUTE_NORETURN void report_fatal_error(StringRef reason,
                                                bool gen_crash_diag = true);
-LLC_ATTRIBUTE_NORETURN void report_fatal_error(const Twine &reason,
+LVC_ATTRIBUTE_NORETURN void report_fatal_error(const Twine &reason,
                                                bool gen_crash_diag = true);
 
 /// Installs a new bad alloc error handler that should be used whenever a
@@ -114,16 +114,16 @@ void install_out_of_memory_new_handler();
 /// If no error handler is installed (default), throws a bad_alloc exception
 /// if LLVM is compiled with exception support. Otherwise prints the error
 /// to standard error and calls abort().
-LLC_ATTRIBUTE_NORETURN void report_bad_alloc_error(const char *Reason,
+LVC_ATTRIBUTE_NORETURN void report_bad_alloc_error(const char *Reason,
                                                    bool GenCrashDiag = true);
 
 /// This function calls abort(), and prints the optional message to stderr.
 /// Use the llvm_unreachable macro (that adds location info), instead of
 /// calling this function directly.
-LLC_ATTRIBUTE_NORETURN void
+LVC_ATTRIBUTE_NORETURN void
 llvm_unreachable_internal(const char *msg = nullptr, const char *file = nullptr,
                           unsigned line = 0);
-} // namespace llc
+} // namespace lvc
 
 /// Marks that the current location is not supposed to be reachable.
 /// In !NDEBUG builds, prints the message and location info to stderr.
@@ -135,11 +135,11 @@ llvm_unreachable_internal(const char *msg = nullptr, const char *file = nullptr,
 /// allows compilers to omit some unnecessary code.
 #ifndef NDEBUG
 #define llvm_unreachable(msg)                                                  \
-  ::llc::llvm_unreachable_internal(msg, __FILE__, __LINE__)
-#elif defined(LLC_BUILTIN_UNREACHABLE)
-#define llvm_unreachable(msg) LLC_BUILTIN_UNREACHABLE
+  ::lvc::llvm_unreachable_internal(msg, __FILE__, __LINE__)
+#elif defined(LVC_BUILTIN_UNREACHABLE)
+#define llvm_unreachable(msg) LVC_BUILTIN_UNREACHABLE
 #else
-#define llvm_unreachable(msg) ::llc::llvm_unreachable_internal()
+#define llvm_unreachable(msg) ::lvc::llvm_unreachable_internal()
 #endif
 
 #endif

@@ -10,15 +10,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLC_ADT_SMALLVECTOR_H
-#define LLC_ADT_SMALLVECTOR_H
+#ifndef LVC_ADT_SMALLVECTOR_H
+#define LVC_ADT_SMALLVECTOR_H
 
-#include "llc/Compiler.h"
-#include "llc/ErrorHandling.h"
-#include "llc/MathExtras.h"
-#include "llc/MemAlloc.h"
-#include "llc/iterator_range.h"
-#include "llc/type_traits.h"
+#include "lvc/Compiler.h"
+#include "lvc/ErrorHandling.h"
+#include "lvc/MathExtras.h"
+#include "lvc/MemAlloc.h"
+#include "lvc/iterator_range.h"
+#include "lvc/type_traits.h"
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
@@ -32,7 +32,7 @@
 #include <type_traits>
 #include <utility>
 
-namespace llc {
+namespace lvc {
 
 /// This is all the stuff common to all SmallVectors.
 ///
@@ -70,7 +70,7 @@ public:
   size_t size() const { return Size; }
   size_t capacity() const { return Capacity; }
 
-  LLC_NODISCARD bool empty() const { return !Size; }
+  LVC_NODISCARD bool empty() const { return !Size; }
 
   /// Set the array size to \p N, which the current array must have enough
   /// capacity for.
@@ -160,7 +160,7 @@ protected:
   /// NewSize.
   bool isSafeToReferenceAfterResize(const void *Elt, size_t NewSize) {
     // Past the end.
-    if (LLC_LIKELY(!isReferenceToStorage(Elt)))
+    if (LVC_LIKELY(!isReferenceToStorage(Elt)))
       return true;
 
     // Return false if Elt will be destroyed by shrinking.
@@ -216,13 +216,13 @@ protected:
   static const T *reserveForParamAndGetAddressImpl(U *This, const T &Elt,
                                                    size_t N) {
     size_t NewSize = This->size() + N;
-    if (LLC_LIKELY(NewSize <= This->capacity()))
+    if (LVC_LIKELY(NewSize <= This->capacity()))
       return &Elt;
 
     bool ReferencesStorage = false;
     int64_t Index = -1;
     if (!U::TakesParamByValue) {
-      if (LLC_UNLIKELY(This->isReferenceToStorage(&Elt))) {
+      if (LVC_UNLIKELY(This->isReferenceToStorage(&Elt))) {
         ReferencesStorage = true;
         Index = &Elt - This->begin();
       }
@@ -636,7 +636,7 @@ public:
     this->set_size(this->size() - NumItems);
   }
 
-  LLC_NODISCARD T pop_back_val() {
+  LVC_NODISCARD T pop_back_val() {
     T Result = ::std::move(this->back());
     this->pop_back();
     return Result;
@@ -913,7 +913,7 @@ public:
   }
 
   template <typename... ArgTypes> reference emplace_back(ArgTypes &&...Args) {
-    if (LLC_UNLIKELY(this->size() >= this->capacity()))
+    if (LVC_UNLIKELY(this->size() >= this->capacity()))
       return this->growAndEmplaceBack(std::forward<ArgTypes>(Args)...);
 
     ::new ((void *)this->end()) T(std::forward<ArgTypes>(Args)...);
@@ -1101,7 +1101,7 @@ template <typename T> struct alignas(T) SmallVectorStorage<T, 0> {};
 /// Forward declaration of SmallVector so that
 /// calculateSmallVectorDefaultInlinedElements can reference
 /// `sizeof(SmallVector<T, 0>)`.
-template <typename T, unsigned N> class LLC_GSL_OWNER SmallVector;
+template <typename T, unsigned N> class LVC_GSL_OWNER SmallVector;
 
 /// Helper class for calculating the default number of inline elements for
 /// `SmallVector<T>`.
@@ -1174,7 +1174,7 @@ template <typename T> struct CalculateSmallVectorDefaultInlinedElements {
 /// \see https://llvm.org/docs/ProgrammersManual.html#llvm-adt-smallvector-h
 template <typename T,
           unsigned N = CalculateSmallVectorDefaultInlinedElements<T>::value>
-class LLC_GSL_OWNER SmallVector : public SmallVectorImpl<T>,
+class LVC_GSL_OWNER SmallVector : public SmallVectorImpl<T>,
                                   SmallVectorStorage<T, N> {
 public:
   SmallVector() : SmallVectorImpl<T>(N) {}
@@ -1259,22 +1259,22 @@ to_vector(R &&Range) {
   return {std::begin(Range), std::end(Range)};
 }
 
-} // end namespace llc
+} // end namespace lvc
 
 namespace std {
 
 /// Implement std::swap in terms of SmallVector swap.
 template <typename T>
-inline void swap(llc::SmallVectorImpl<T> &LHS, llc::SmallVectorImpl<T> &RHS) {
+inline void swap(lvc::SmallVectorImpl<T> &LHS, lvc::SmallVectorImpl<T> &RHS) {
   LHS.swap(RHS);
 }
 
 /// Implement std::swap in terms of SmallVector swap.
 template <typename T, unsigned N>
-inline void swap(llc::SmallVector<T, N> &LHS, llc::SmallVector<T, N> &RHS) {
+inline void swap(lvc::SmallVector<T, N> &LHS, lvc::SmallVector<T, N> &RHS) {
   LHS.swap(RHS);
 }
 
 } // end namespace std
 
-#endif // LLC_ADT_SMALLVECTOR_H
+#endif // LVC_ADT_SMALLVECTOR_H

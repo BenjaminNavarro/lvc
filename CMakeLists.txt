@@ -4,10 +4,10 @@ include(cmake/fix-paths.cmake)
 include(cmake/in-source-guard.cmake)
 
 project(
-    llc
+    lvc
     VERSION 11.1.0
     DESCRIPTION "Collection of C++ containers extracted from LLVM"
-    HOMEPAGE_URL "https://github.com/BenjaminNavarro/llc"
+    HOMEPAGE_URL "https://github.com/BenjaminNavarro/lvc"
     LANGUAGES CXX
 )
 
@@ -22,47 +22,47 @@ if(MSVC)
 endif()
 
 add_library(
-    llc_llc
-    include/llc/Compiler.h
-    include/llc/DataTypes.h
-    include/llc/ErrorHandling.h
-    include/llc/iterator_range.h
-    include/llc/llc.h
-    include/llc/MathExtras.h
-    include/llc/MemAlloc.h
-    include/llc/SmallVector.h
-    include/llc/type_traits.h
+    lvc_lvc
+    include/lvc/Compiler.h
+    include/lvc/DataTypes.h
+    include/lvc/ErrorHandling.h
+    include/lvc/iterator_range.h
+    include/lvc/lvc.h
+    include/lvc/MathExtras.h
+    include/lvc/MemAlloc.h
+    include/lvc/SmallVector.h
+    include/lvc/type_traits.h
     source/SmallVector.cpp
     source/ErrorHandling.cpp
 )
-add_library(llc::llc ALIAS llc_llc)
+add_library(lvc::lvc ALIAS lvc_lvc)
 
 check_include_file_cxx(unistd.h HAVE_UNISTD_H)
 if(HAVE_UNISTD_H)
-  target_compile_definitions(llc_llc PUBLIC HAVE_UNISTD_H)
+  target_compile_definitions(lvc_lvc PUBLIC HAVE_UNISTD_H)
 endif()
 
 if(NOT BUILD_SHARED_LIBS)
-  target_compile_definitions(llc_llc PUBLIC LLC_STATIC_DEFINE)
+  target_compile_definitions(lvc_lvc PUBLIC LVC_STATIC_DEFINE)
 endif()
 
 set_target_properties(
-    llc_llc PROPERTIES
+    lvc_lvc PROPERTIES
     VERSION "${PROJECT_VERSION}"
     SOVERSION "${PROJECT_VERSION_MAJOR}"
-    EXPORT_NAME llc
-    OUTPUT_NAME llc
+    EXPORT_NAME lvc
+    OUTPUT_NAME lvc
 )
 
 target_include_directories(
-    llc_llc
-    ${llc_warning_guard}
+    lvc_lvc
+    ${lvc_warning_guard}
     PUBLIC
     "$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>"
-    "$<INSTALL_INTERFACE:include/llc>"
+    "$<INSTALL_INTERFACE:include/lvc>"
 )
 
-target_compile_features(llc_llc PUBLIC cxx_std_14)
+target_compile_features(lvc_lvc PUBLIC cxx_std_14)
 
 # ---- Install rules ----
 
@@ -70,12 +70,12 @@ include(cmake/install-rules.cmake)
 
 # ---- Developer mode ----
 
-if(NOT llc_DEVELOPER_MODE)
+if(NOT lvc_DEVELOPER_MODE)
   return()
 elseif(NOT PROJECT_IS_TOP_LEVEL)
   message(
       AUTHOR_WARNING
-      "Developer mode is intended for developers of llc"
+      "Developer mode is intended for developers of lvc"
   )
 endif()
 

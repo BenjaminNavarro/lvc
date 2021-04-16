@@ -10,12 +10,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llc/SmallVector.h"
+#include "lvc/SmallVector.h"
 #include <cstdint>
-#ifdef LLC_ENABLE_EXCEPTIONS
+#ifdef LVC_ENABLE_EXCEPTIONS
 #include <stdexcept>
 #endif
-using namespace llc;
+using namespace lvc;
 
 // Check that no bytes are wasted and everything is well-aligned.
 namespace {
@@ -47,14 +47,14 @@ static_assert(sizeof(SmallVector<char, 0>) ==
 
 /// Report that MinSize doesn't fit into this vector's size type. Throws
 /// std::length_error or calls report_fatal_error.
-LLC_ATTRIBUTE_NORETURN
+LVC_ATTRIBUTE_NORETURN
 static void report_size_overflow(size_t MinSize, size_t MaxSize);
 static void report_size_overflow(size_t MinSize, size_t MaxSize) {
   std::string Reason = "SmallVector unable to grow. Requested capacity (" +
                        std::to_string(MinSize) +
                        ") is larger than maximum value for size type (" +
                        std::to_string(MaxSize) + ")";
-#ifdef LLC_ENABLE_EXCEPTIONS
+#ifdef LVC_ENABLE_EXCEPTIONS
   throw std::length_error(Reason);
 #else
   report_fatal_error(Reason);
@@ -63,12 +63,12 @@ static void report_size_overflow(size_t MinSize, size_t MaxSize) {
 
 /// Report that this vector is already at maximum capacity. Throws
 /// std::length_error or calls report_fatal_error.
-LLC_ATTRIBUTE_NORETURN static void report_at_maximum_capacity(size_t MaxSize);
+LVC_ATTRIBUTE_NORETURN static void report_at_maximum_capacity(size_t MaxSize);
 static void report_at_maximum_capacity(size_t MaxSize) {
   std::string Reason =
       "SmallVector capacity unable to grow. Already at maximum size " +
       std::to_string(MaxSize);
-#ifdef LLC_ENABLE_EXCEPTIONS
+#ifdef LVC_ENABLE_EXCEPTIONS
   throw std::length_error(Reason);
 #else
   report_fatal_error(Reason);
@@ -103,7 +103,7 @@ template <class Size_T>
 void *SmallVectorBase<Size_T>::mallocForGrow(size_t MinSize, size_t TSize,
                                              size_t &NewCapacity) {
   NewCapacity = getNewCapacity<Size_T>(MinSize, TSize, this->capacity());
-  return llc::safe_malloc(NewCapacity * TSize);
+  return lvc::safe_malloc(NewCapacity * TSize);
 }
 
 // Note: Moving this function into the header may cause performance regression.
@@ -126,14 +126,14 @@ void SmallVectorBase<Size_T>::grow_pod(void *FirstEl, size_t MinSize,
   this->Capacity = NewCapacity;
 }
 
-template class llc::SmallVectorBase<uint32_t>;
+template class lvc::SmallVectorBase<uint32_t>;
 
 // Disable the uint64_t instantiation for 32-bit builds.
 // Both uint32_t and uint64_t instantiations are needed for 64-bit builds.
 // This instantiation will never be used in 32-bit builds, and will cause
 // warnings when sizeof(Size_T) > sizeof(size_t).
 #if SIZE_MAX > UINT32_MAX
-template class llc::SmallVectorBase<uint64_t>;
+template class lvc::SmallVectorBase<uint64_t>;
 
 // Assertions to ensure this #if stays in sync with SmallVectorSizeType.
 static_assert(sizeof(SmallVectorSizeType<char>) == sizeof(uint64_t),

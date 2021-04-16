@@ -13,16 +13,16 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLC_SUPPORT_MEMALLOC_H
-#define LLC_SUPPORT_MEMALLOC_H
+#ifndef LVC_SUPPORT_MEMALLOC_H
+#define LVC_SUPPORT_MEMALLOC_H
 
-#include "llc/Compiler.h"
-#include "llc/ErrorHandling.h"
+#include "lvc/Compiler.h"
+#include "lvc/ErrorHandling.h"
 #include <cstdlib>
 
-namespace llc {
+namespace lvc {
 
-LLC_ATTRIBUTE_RETURNS_NONNULL inline void *safe_malloc(size_t Sz) {
+LVC_ATTRIBUTE_RETURNS_NONNULL inline void *safe_malloc(size_t Sz) {
   void *Result = std::malloc(Sz);
   if (Result == nullptr) {
     // It is implementation-defined whether allocation occurs if the space
@@ -35,7 +35,7 @@ LLC_ATTRIBUTE_RETURNS_NONNULL inline void *safe_malloc(size_t Sz) {
   return Result;
 }
 
-LLC_ATTRIBUTE_RETURNS_NONNULL inline void *safe_calloc(size_t Count,
+LVC_ATTRIBUTE_RETURNS_NONNULL inline void *safe_calloc(size_t Count,
                                                        size_t Sz) {
   void *Result = std::calloc(Count, Sz);
   if (Result == nullptr) {
@@ -49,7 +49,7 @@ LLC_ATTRIBUTE_RETURNS_NONNULL inline void *safe_calloc(size_t Count,
   return Result;
 }
 
-LLC_ATTRIBUTE_RETURNS_NONNULL inline void *safe_realloc(void *Ptr, size_t Sz) {
+LVC_ATTRIBUTE_RETURNS_NONNULL inline void *safe_realloc(void *Ptr, size_t Sz) {
   void *Result = std::realloc(Ptr, Sz);
   if (Result == nullptr) {
     // It is implementation-defined whether allocation occurs if the space
@@ -71,7 +71,7 @@ LLC_ATTRIBUTE_RETURNS_NONNULL inline void *safe_realloc(void *Ptr, size_t Sz) {
 /// like posix_memalign due to portability. It is mostly intended to allow
 /// compatibility with platforms that, after aligned allocation was added, use
 /// reduced default alignment.
-LLC_ATTRIBUTE_RETURNS_NONNULL LLC_ATTRIBUTE_RETURNS_NOALIAS void *
+LVC_ATTRIBUTE_RETURNS_NONNULL LVC_ATTRIBUTE_RETURNS_NOALIAS void *
 allocate_buffer(size_t Size, size_t Alignment);
 
 /// Deallocate a buffer of memory with the given size and alignment.
@@ -83,5 +83,5 @@ allocate_buffer(size_t Size, size_t Alignment);
 /// most likely using the above helper.
 void deallocate_buffer(void *Ptr, size_t Size, size_t Alignment);
 
-} // namespace llc
+} // namespace lvc
 #endif

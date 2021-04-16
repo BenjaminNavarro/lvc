@@ -15,12 +15,12 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLC_ADT_ITERATOR_RANGE_H
-#define LLC_ADT_ITERATOR_RANGE_H
+#ifndef LVC_ADT_ITERATOR_RANGE_H
+#define LVC_ADT_ITERATOR_RANGE_H
 
 #include <utility>
 
-namespace llc {
+namespace lvc {
 
 /// A range adaptor for a pair of iterators.
 ///
@@ -57,6 +57,6 @@ template <typename T> iterator_range<T> make_range(std::pair<T, T> p) {
   return iterator_range<T>(std::move(p.first), std::move(p.second));
 }
 
-} // namespace llc
+} // namespace lvc
 
 #endif

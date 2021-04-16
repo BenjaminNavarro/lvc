@@ -11,8 +11,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llc/ErrorHandling.h"
-#include "llc/SmallVector.h"
+#include "lvc/ErrorHandling.h"
+#include "lvc/SmallVector.h"
 #include <cassert>
 #include <cstdlib>
 #include <cstring>
@@ -28,7 +28,7 @@
 #include <io.h>
 #endif
 
-using namespace llc;
+using namespace lvc;
 
 static fatal_error_handler_t ErrorHandler = nullptr;
 static void *ErrorHandlerUserData = nullptr;
@@ -36,13 +36,13 @@ static void *ErrorHandlerUserData = nullptr;
 static fatal_error_handler_t BadAllocErrorHandler = nullptr;
 static void *BadAllocErrorHandlerUserData = nullptr;
 
-void llc::report_fatal_error(const std::string &Reason, bool GenCrashDiag) {
+void lvc::report_fatal_error(const std::string &Reason, bool GenCrashDiag) {
   fatal_error_handler_t Handler = nullptr;
   void *HandlerData = nullptr;
   {
     // Only acquire the mutex while reading the handler, so as not to invoke a
     // user-supplied callback under a lock.
-#if LLC_ENABLE_THREADS == 1
+#if LVC_ENABLE_THREADS == 1
     std::lock_guard<std::mutex> Lock(BadAllocErrorHandlerMutex);
 #endif
     Handler = BadAllocErrorHandler;
@@ -54,7 +54,7 @@ void llc::report_fatal_error(const std::string &Reason, bool GenCrashDiag) {
     llvm_unreachable("bad alloc handler should not return");
   }
 
-#ifdef LLC_ENABLE_EXCEPTIONS
+#ifdef LVC_ENABLE_EXCEPTIONS
   // If exceptions are enabled, make OOM in malloc look like OOM in new.
   throw std::bad_alloc();
 #else
@@ -69,13 +69,13 @@ void llc::report_fatal_error(const std::string &Reason, bool GenCrashDiag) {
 #endif
 }
 
-void llc::report_fatal_error(const char *Reason, bool GenCrashDiag) {
-  llc::fatal_error_handler_t handler = nullptr;
+void lvc::report_fatal_error(const char *Reason, bool GenCrashDiag) {
+  lvc::fatal_error_handler_t handler = nullptr;
   void *handlerData = nullptr;
   {
     // Only acquire the mutex while reading the handler, so as not to invoke a
     // user-supplied callback under a lock.
-#if LLC_ENABLE_THREADS == 1
+#if LVC_ENABLE_THREADS == 1
     std::lock_guard<std::mutex> Lock(ErrorHandlerMutex);
 #endif
     handler = ErrorHandler;
@@ -101,13 +101,13 @@ void llc::report_fatal_error(const char *Reason, bool GenCrashDiag) {
   abort();
 }
 
-void llc::report_bad_alloc_error(const char *Reason, bool GenCrashDiag) {
+void lvc::report_bad_alloc_error(const char *Reason, bool GenCrashDiag) {
   fatal_error_handler_t Handler = nullptr;
   void *HandlerData = nullptr;
   {
     // Only acquire the mutex while reading the handler, so as not to invoke a
     // user-supplied callback under a lock.
-#if LLC_ENABLE_THREADS == 1
+#if LVC_ENABLE_THREADS == 1
     std::lock_guard<std::mutex> Lock(BadAllocErrorHandlerMutex);
 #endif
     Handler = BadAllocErrorHandler;
@@ -119,7 +119,7 @@ void llc::report_bad_alloc_error(const char *Reason, bool GenCrashDiag) {
     llvm_unreachable("bad alloc handler should not return");
   }
 
-#ifdef LLC_ENABLE_EXCEPTIONS
+#ifdef LVC_ENABLE_EXCEPTIONS
   // If exceptions are enabled, make OOM in malloc look like OOM in new.
   throw std::bad_alloc();
 #else
@@ -134,7 +134,7 @@ void llc::report_bad_alloc_error(const char *Reason, bool GenCrashDiag) {
 #endif
 }
 
-void llc::llvm_unreachable_internal(const char *msg, const char *file,
+void lvc::llvm_unreachable_internal(const char *msg, const char *file,
                                     unsigned line) {
   // This code intentionally doesn't call the ErrorHandler callback, because
   // llvm_unreachable is intended to be used to indicate "impossible"
@@ -146,9 +146,9 @@ void llc::llvm_unreachable_internal(const char *msg, const char *file,
     std::cout << " at " << file << ":" << line;
   std::cout << "!\n";
   abort();
-#ifdef LLC_BUILTIN_UNREACHABLE
+#ifdef LVC_BUILTIN_UNREACHABLE
   // Windows systems and possibly others don't declare abort() to be noreturn,
   // so use the unreachable builtin to avoid a Clang self-host warning.
-  LLC_BUILTIN_UNREACHABLE;
+  LVC_BUILTIN_UNREACHABLE;
 #endif
 }

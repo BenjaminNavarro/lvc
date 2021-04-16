@@ -5,48 +5,48 @@ install(
     DIRECTORY
     "${PROJECT_SOURCE_DIR}/include/"
     DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
-    COMPONENT llc_Development
+    COMPONENT lvc_Development
 )
 
 install(
-    TARGETS llc_llc
-    EXPORT llcTargets
+    TARGETS lvc_lvc
+    EXPORT lvcTargets
     RUNTIME #
-    COMPONENT llc_Runtime
+    COMPONENT lvc_Runtime
     LIBRARY #
-    COMPONENT llc_Runtime
-    NAMELINK_COMPONENT llc_Development
+    COMPONENT lvc_Runtime
+    NAMELINK_COMPONENT lvc_Development
     ARCHIVE #
-    COMPONENT llc_Development
+    COMPONENT lvc_Development
     INCLUDES #
     DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
 )
 
 write_basic_package_version_file(
-    llcConfigVersion.cmake
+    lvcConfigVersion.cmake
     COMPATIBILITY SameMajorVersion
 )
 
 set(
-    llc_INSTALL_CMAKEDIR "${CMAKE_INSTALL_LIBDIR}/cmake/llc"
+    lvc_INSTALL_CMAKEDIR "${CMAKE_INSTALL_LIBDIR}/cmake/lvc"
     CACHE STRING "CMake package config location relative to the install prefix"
 )
 
-mark_as_advanced(llc_INSTALL_CMAKEDIR)
+mark_as_advanced(lvc_INSTALL_CMAKEDIR)
 
 install(
     FILES
-    "${PROJECT_SOURCE_DIR}/cmake/llcConfig.cmake"
-    "${PROJECT_BINARY_DIR}/llcConfigVersion.cmake"
-    DESTINATION "${llc_INSTALL_CMAKEDIR}"
-    COMPONENT llc_Development
+    "${PROJECT_SOURCE_DIR}/cmake/lvcConfig.cmake"
+    "${PROJECT_BINARY_DIR}/lvcConfigVersion.cmake"
+    DESTINATION "${lvc_INSTALL_CMAKEDIR}"
+    COMPONENT lvc_Development
 )
 
 install(
-    EXPORT llcTargets
-    NAMESPACE llc::
-    DESTINATION "${llc_INSTALL_CMAKEDIR}"
-    COMPONENT llc_Development
+    EXPORT lvcTargets
+    NAMESPACE lvc::
+    DESTINATION "${lvc_INSTALL_CMAKEDIR}"
+    COMPONENT lvc_Development
 )
 
 if(PROJECT_IS_TOP_LEVEL)

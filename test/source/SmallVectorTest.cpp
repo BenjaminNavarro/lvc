@@ -10,12 +10,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llc/llc.h"
+#include "lvc/lvc.h"
 #include "gtest/gtest.h"
 #include <list>
 #include <stdarg.h>
 
-using namespace llc;
+using namespace lvc;
 
 namespace {
 
@@ -107,7 +107,7 @@ public:
     return c0.getValue() == c1.getValue();
   }
 
-  friend bool LLC_ATTRIBUTE_UNUSED operator!=(const Constructable &c0,
+  friend bool LVC_ATTRIBUTE_UNUSED operator!=(const Constructable &c0,
                                               const Constructable &c1) {
     return c0.getValue() != c1.getValue();
   }
@@ -131,7 +131,7 @@ private:
   NonCopyable &operator=(const NonCopyable &) = delete;
 };
 
-LLC_ATTRIBUTE_USED void CompileTest() {
+LVC_ATTRIBUTE_USED void CompileTest() {
   SmallVector<NonCopyable, 0> V;
   V.resize(42);
 }

@@ -1,12 +1,12 @@
 from conans import ConanFile, CMake, tools
 
 
-class llcConan(ConanFile):
-    name = "llc"
+class lvcConan(ConanFile):
+    name = "lvc"
     version = "11.1.0"
     license = "Apache 2.0"
     author = "Benjamin Navarro <navarro.benjamin13@gmail.com>"
-    url = "https://github.com/BenjaminNavarro/llc"
+    url = "https://github.com/BenjaminNavarro/lvc"
     description = "Collection of C++ containers extracted from LLVM"
     topics = "C++", "LLVM", "containers"
     settings = "os", "compiler", "build_type", "arch"
@@ -44,7 +44,7 @@ class llcConan(ConanFile):
             return self._cmake
         else:
             self._cmake = CMake(self)
-            self._cmake.definitions['llc_DEVELOPER_MODE'] = self.options.testing
+            self._cmake.definitions['lvc_DEVELOPER_MODE'] = self.options.testing
             self._cmake.definitions['BUILD_SHARED_LIBS'] = self.options.shared
             self._cmake.configure(build_folder="build")
             return self._cmake

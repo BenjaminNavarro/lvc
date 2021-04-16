@@ -10,10 +10,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLC_SUPPORT_MATHEXTRAS_H
-#define LLC_SUPPORT_MATHEXTRAS_H
+#ifndef LVC_SUPPORT_MATHEXTRAS_H
+#define LVC_SUPPORT_MATHEXTRAS_H
 
-#include "llc/Compiler.h"
+#include "lvc/Compiler.h"
 #include <algorithm>
 #include <cassert>
 #include <climits>
@@ -39,7 +39,7 @@ unsigned char _BitScanReverse64(unsigned long *_Index, unsigned __int64 _Mask);
 }
 #endif
 
-namespace llc {
+namespace lvc {
 
 /// The behavior an operation has on an input of 0.
 enum ZeroBehavior {
@@ -169,7 +169,7 @@ unsigned countTrailingZeros(T Val, ZeroBehavior ZB = ZB_Width) {
   static_assert(std::numeric_limits<T>::is_integer &&
                     !std::numeric_limits<T>::is_signed,
                 "Only unsigned integral types are allowed.");
-  return llc::detail::TrailingZerosCounter<T, sizeof(T)>::count(Val, ZB);
+  return lvc::detail::TrailingZerosCounter<T, sizeof(T)>::count(Val, ZB);
 }
 
 namespace detail {
@@ -238,7 +238,7 @@ unsigned countLeadingZeros(T Val, ZeroBehavior ZB = ZB_Width) {
   static_assert(std::numeric_limits<T>::is_integer &&
                     !std::numeric_limits<T>::is_signed,
                 "Only unsigned integral types are allowed.");
-  return llc::detail::LeadingZerosCounter<T, sizeof(T)>::count(Val, ZB);
+  return lvc::detail::LeadingZerosCounter<T, sizeof(T)>::count(Val, ZB);
 }
 
 /// Get the index of the first set bit starting from the least
@@ -581,7 +581,7 @@ template <typename T> inline unsigned countPopulation(T Value) {
 /// Compile time Log2.
 /// Valid only for positive powers of two.
 template <size_t kValue> constexpr inline size_t CTLog2() {
-  static_assert(kValue > 0 && llc::isPowerOf2_64(kValue),
+  static_assert(kValue > 0 && lvc::isPowerOf2_64(kValue),
                 "Value is not a valid power of 2");
   return 1 + CTLog2<kValue / 2>();
 }
@@ -963,6 +963,6 @@ std::enable_if_t<std::is_signed<T>::value, T> MulOverflow(T X, T Y, T &Result) {
     return UX > (static_cast<U>(std::numeric_limits<T>::max())) / UY;
 }
 
-} // namespace llc
+} // namespace lvc
 
 #endif

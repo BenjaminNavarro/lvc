@@ -10,14 +10,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLC_SUPPORT_TYPE_TRAITS_H
-#define LLC_SUPPORT_TYPE_TRAITS_H
+#ifndef LVC_SUPPORT_TYPE_TRAITS_H
+#define LVC_SUPPORT_TYPE_TRAITS_H
 
-#include "llc/Compiler.h"
+#include "lvc/Compiler.h"
 #include <type_traits>
 #include <utility>
 
-namespace llc {
+namespace lvc {
 
 /// Metafunction that determines whether the given type is either an
 /// integral type or an enumeration type, including enum classes.
@@ -98,7 +98,7 @@ template <class T> union trivial_helper { T t; };
 template <typename T>
 struct is_trivially_copy_constructible
     : std::is_copy_constructible<
-          ::llc::detail::copy_construction_triviality_helper<T>> {};
+          ::lvc::detail::copy_construction_triviality_helper<T>> {};
 template <typename T>
 struct is_trivially_copy_constructible<T &> : std::true_type {};
 template <typename T>
@@ -109,7 +109,7 @@ struct is_trivially_copy_constructible<T &&> : std::false_type {};
 template <typename T>
 struct is_trivially_move_constructible
     : std::is_move_constructible<
-          ::llc::detail::move_construction_triviality_helper<T>> {};
+          ::lvc::detail::move_construction_triviality_helper<T>> {};
 template <typename T>
 struct is_trivially_move_constructible<T &> : std::true_type {};
 template <typename T>
@@ -174,13 +174,13 @@ public:
 
 #ifdef HAVE_STD_IS_TRIVIALLY_COPYABLE
   static_assert(value == std::is_trivially_copyable<T>::value,
-                "inconsistent behavior between llc:: and std:: implementation "
+                "inconsistent behavior between lvc:: and std:: implementation "
                 "of is_trivially_copyable");
 #endif
 };
 template <typename T>
 class is_trivially_copyable<T *> : public std::true_type {};
 
-} // end namespace llc
+} // end namespace lvc
 
-#endif // LLC_SUPPORT_TYPE_TRAITS_H
+#endif // LVC_SUPPORT_TYPE_TRAITS_H
