@@ -12,10 +12,17 @@ endif()
 
 find_package(GTest REQUIRED)
 
+file(
+  GLOB_RECURSE
+  LVC_TEST_FILES
+  CONFIGURE_DEPENDS
+  source/*.cpp
+)
+
 add_executable(
   lvc_test 
   source/main.cpp
-  source/SmallVectorTest.cpp
+  ${LVC_TEST_FILES}
 )
 target_link_libraries(lvc_test PRIVATE lvc::lvc GTest::gtest)
 target_compile_features(lvc_test PRIVATE cxx_std_11)

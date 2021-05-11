@@ -10,7 +10,9 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "lvc/lvc.h"
+#include "lvc/ADT/SmallVector.h"
+#include "lvc/ADT/ArrayRef.h"
+#include "lvc/Support/Compiler.h"
 #include "gtest/gtest.h"
 #include <list>
 #include <stdarg.h>
@@ -35,19 +37,21 @@ private:
   int value;
 
 public:
-  Constructable() : constructed(true), value(0) { ++numConstructorCalls; }
+  Constructable() : constructed(true), value(0) {
+    ++numConstructorCalls;
+  }
 
   Constructable(int val) : constructed(true), value(val) {
     ++numConstructorCalls;
   }
 
-  Constructable(const Constructable &src) : constructed(true) {
+  Constructable(const Constructable & src) : constructed(true) {
     value = src.value;
     ++numConstructorCalls;
     ++numCopyConstructorCalls;
   }
 
-  Constructable(Constructable &&src) : constructed(true) {
+  Constructable(Constructable && src) : constructed(true) {
     value = src.value;
     src.value = 0;
     ++numConstructorCalls;
@@ -60,7 +64,7 @@ public:
     constructed = false;
   }
 
-  Constructable &operator=(const Constructable &src) {
+  Constructable & operator=(const Constructable & src) {
     EXPECT_TRUE(constructed);
     value = src.value;
     ++numAssignmentCalls;
@@ -68,7 +72,7 @@ public:
     return *this;
   }
 
-  Constructable &operator=(Constructable &&src) {
+  Constructable & operator=(Constructable && src) {
     EXPECT_TRUE(constructed);
     value = src.value;
     src.value = 0;
@@ -77,7 +81,9 @@ public:
     return *this;
   }
 
-  int getValue() const { return abs(value); }
+  int getValue() const {
+    return abs(value);
+  }
 
   static void reset() {
     numConstructorCalls = 0;
@@ -89,26 +95,40 @@ public:
     numCopyAssignmentCalls = 0;
   }
 
-  static int getNumConstructorCalls() { return numConstructorCalls; }
+  static int getNumConstructorCalls() {
+    return numConstructorCalls;
+  }
 
-  static int getNumMoveConstructorCalls() { return numMoveConstructorCalls; }
+  static int getNumMoveConstructorCalls() {
+    return numMoveConstructorCalls;
+  }
 
-  static int getNumCopyConstructorCalls() { return numCopyConstructorCalls; }
+  static int getNumCopyConstructorCalls() {
+    return numCopyConstructorCalls;
+  }
 
-  static int getNumDestructorCalls() { return numDestructorCalls; }
+  static int getNumDestructorCalls() {
+    return numDestructorCalls;
+  }
 
-  static int getNumAssignmentCalls() { return numAssignmentCalls; }
+  static int getNumAssignmentCalls() {
+    return numAssignmentCalls;
+  }
 
-  static int getNumMoveAssignmentCalls() { return numMoveAssignmentCalls; }
+  static int getNumMoveAssignmentCalls() {
+    return numMoveAssignmentCalls;
+  }
 
-  static int getNumCopyAssignmentCalls() { return numCopyAssignmentCalls; }
+  static int getNumCopyAssignmentCalls() {
+    return numCopyAssignmentCalls;
+  }
 
-  friend bool operator==(const Constructable &c0, const Constructable &c1) {
+  friend bool operator==(const Constructable & c0, const Constructable & c1) {
     return c0.getValue() == c1.getValue();
   }
 
-  friend bool LVC_ATTRIBUTE_UNUSED operator!=(const Constructable &c0,
-                                              const Constructable &c1) {
+  friend bool LVC_ATTRIBUTE_UNUSED
+  operator!=(const Constructable & c0, const Constructable & c1) {
     return c0.getValue() != c1.getValue();
   }
 };
@@ -125,7 +145,6 @@ struct NonCopyable {
   NonCopyable() {}
   NonCopyable(NonCopyable &&) {}
   NonCopyable &operator=(NonCopyable &&) { return *this; }
-
 private:
   NonCopyable(const NonCopyable &) = delete;
   NonCopyable &operator=(const NonCopyable &) = delete;
@@ -140,7 +159,8 @@ class SmallVectorTestBase : public testing::Test {
 protected:
   void SetUp() override { Constructable::reset(); }
 
-  template <typename VectorT> void assertEmpty(VectorT &v) {
+  template <typename VectorT>
+  void assertEmpty(VectorT & v) {
     // Size tests
     EXPECT_EQ(0u, v.size());
     EXPECT_TRUE(v.empty());
@@ -151,7 +171,7 @@ protected:
 
   // Assert that v contains the specified values, in order.
   template <typename VectorT>
-  void assertValuesInOrder(VectorT &v, size_t size, ...) {
+  void assertValuesInOrder(VectorT & v, size_t size, ...) {
     EXPECT_EQ(size, v.size());
 
     va_list ap;
@@ -166,7 +186,7 @@ protected:
 
   // Generate a sequence of values to initialize the vector.
   template <typename VectorT>
-  void makeSequence(VectorT &v, int start, int end) {
+  void makeSequence(VectorT & v, int start, int end) {
     for (int i = start; i <= end; ++i) {
       v.push_back(Constructable(i));
     }
@@ -174,18 +194,21 @@ protected:
 };
 
 // Test fixture class
-template <typename VectorT> class SmallVectorTest : public SmallVectorTestBase {
+template <typename VectorT>
+class SmallVectorTest : public SmallVectorTestBase {
 protected:
   VectorT theVector;
   VectorT otherVector;
 };
 
-typedef ::testing::Types<
-    SmallVector<Constructable, 0>, SmallVector<Constructable, 1>,
-    SmallVector<Constructable, 2>, SmallVector<Constructable, 4>,
-    SmallVector<Constructable, 5>>
-    SmallVectorTestTypes;
-TYPED_TEST_SUITE(SmallVectorTest, SmallVectorTestTypes);
+
+typedef ::testing::Types<SmallVector<Constructable, 0>,
+                         SmallVector<Constructable, 1>,
+                         SmallVector<Constructable, 2>,
+                         SmallVector<Constructable, 4>,
+                         SmallVector<Constructable, 5>
+                         > SmallVectorTestTypes;
+TYPED_TEST_CASE(SmallVectorTest, SmallVectorTestTypes);
 
 // Constructor test.
 TYPED_TEST(SmallVectorTest, ConstructorNonIterTest) {
@@ -355,7 +378,7 @@ TYPED_TEST(SmallVectorTest, OverflowTest) {
   // Test size and values.
   EXPECT_EQ(10u, this->theVector.size());
   for (int i = 0; i < 10; ++i) {
-    EXPECT_EQ(i + 1, this->theVector[i].getValue());
+    EXPECT_EQ(i+1, this->theVector[i].getValue());
   }
 
   // Now resize back to fixed size.
@@ -515,7 +538,7 @@ TYPED_TEST(SmallVectorTest, MoveAssignTest) {
   // Set up our vector with a single element, but enough capacity for 4.
   this->theVector.reserve(4);
   this->theVector.push_back(Constructable(1));
-
+  
   // Set up the other vector with 2 elements.
   this->otherVector.push_back(Constructable(2));
   this->otherVector.push_back(Constructable(3));
@@ -529,12 +552,12 @@ TYPED_TEST(SmallVectorTest, MoveAssignTest) {
   // Make sure the # of constructor/destructor calls line up. There
   // are two live objects after clearing the other vector.
   this->otherVector.clear();
-  EXPECT_EQ(Constructable::getNumConstructorCalls() - 2,
+  EXPECT_EQ(Constructable::getNumConstructorCalls()-2, 
             Constructable::getNumDestructorCalls());
 
   // There shouldn't be any live objects any more.
   this->theVector.clear();
-  EXPECT_EQ(Constructable::getNumConstructorCalls(),
+  EXPECT_EQ(Constructable::getNumConstructorCalls(), 
             Constructable::getNumDestructorCalls());
 }
 
@@ -564,7 +587,7 @@ TYPED_TEST(SmallVectorTest, InsertTest) {
 
   this->makeSequence(this->theVector, 1, 3);
   typename TypeParam::iterator I =
-      this->theVector.insert(this->theVector.begin() + 1, Constructable(77));
+    this->theVector.insert(this->theVector.begin() + 1, Constructable(77));
   EXPECT_EQ(this->theVector.begin() + 1, I);
   this->assertValuesInOrder(this->theVector, 4u, 1, 77, 2, 3);
 }
@@ -641,20 +664,20 @@ TYPED_TEST(SmallVectorTest, InsertRepeatedEmptyTest) {
   this->makeSequence(this->theVector, 10, 15);
 
   // Empty insert.
-  EXPECT_EQ(
-      this->theVector.end(),
-      this->theVector.insert(this->theVector.end(), 0, Constructable(42)));
+  EXPECT_EQ(this->theVector.end(),
+            this->theVector.insert(this->theVector.end(),
+                                   0, Constructable(42)));
   EXPECT_EQ(this->theVector.begin() + 1,
-            this->theVector.insert(this->theVector.begin() + 1, 0,
-                                   Constructable(42)));
+            this->theVector.insert(this->theVector.begin() + 1,
+                                   0, Constructable(42)));
 }
 
 // Insert range.
 TYPED_TEST(SmallVectorTest, InsertRangeTest) {
   SCOPED_TRACE("InsertRangeTest");
 
-  Constructable Arr[3] = {Constructable(77), Constructable(77),
-                          Constructable(77)};
+  Constructable Arr[3] =
+    { Constructable(77), Constructable(77), Constructable(77) };
 
   this->makeSequence(this->theVector, 1, 3);
   Constructable::reset();
@@ -674,17 +697,18 @@ TYPED_TEST(SmallVectorTest, InsertRangeTest) {
   this->assertValuesInOrder(this->theVector, 6u, 1, 77, 77, 77, 2, 3);
 }
 
+
 TYPED_TEST(SmallVectorTest, InsertRangeAtEndTest) {
   SCOPED_TRACE("InsertRangeTest");
 
-  Constructable Arr[3] = {Constructable(77), Constructable(77),
-                          Constructable(77)};
+  Constructable Arr[3] =
+    { Constructable(77), Constructable(77), Constructable(77) };
 
   this->makeSequence(this->theVector, 1, 3);
 
   // Insert at end.
   Constructable::reset();
-  auto I = this->theVector.insert(this->theVector.end(), Arr, Arr + 3);
+  auto I = this->theVector.insert(this->theVector.end(), Arr, Arr+3);
   // Copy construct the 3 elements into new space at the top.
   EXPECT_EQ(3, Constructable::getNumCopyConstructorCalls());
   // Don't copy/move anything else.
@@ -695,7 +719,8 @@ TYPED_TEST(SmallVectorTest, InsertRangeAtEndTest) {
               Constructable::getNumMoveConstructorCalls() == 3);
   EXPECT_EQ(0, Constructable::getNumMoveAssignmentCalls());
   EXPECT_EQ(this->theVector.begin() + 3, I);
-  this->assertValuesInOrder(this->theVector, 6u, 1, 2, 3, 77, 77, 77);
+  this->assertValuesInOrder(this->theVector, 6u,
+                            1, 2, 3, 77, 77, 77);
 }
 
 TYPED_TEST(SmallVectorTest, InsertEmptyRangeTest) {
@@ -766,16 +791,13 @@ TYPED_TEST(SmallVectorTest, IteratorTest) {
 template <typename InvalidType> class DualSmallVectorsTest;
 
 template <typename VectorT1, typename VectorT2>
-class DualSmallVectorsTest<std::pair<VectorT1, VectorT2>>
-    : public SmallVectorTestBase {
+class DualSmallVectorsTest<std::pair<VectorT1, VectorT2>> : public SmallVectorTestBase {
 protected:
   VectorT1 theVector;
   VectorT2 otherVector;
 
   template <typename T, unsigned N>
-  static unsigned NumBuiltinElts(const SmallVector<T, N> &) {
-    return N;
-  }
+  static unsigned NumBuiltinElts(const SmallVector<T, N>&) { return N; }
 };
 
 typedef ::testing::Types<
@@ -786,10 +808,10 @@ typedef ::testing::Types<
     // Big mode -> Small mode.
     std::pair<SmallVector<Constructable, 2>, SmallVector<Constructable, 4>>,
     // Big mode -> Big mode.
-    std::pair<SmallVector<Constructable, 2>, SmallVector<Constructable, 2>>>
-    DualSmallVectorTestTypes;
+    std::pair<SmallVector<Constructable, 2>, SmallVector<Constructable, 2>>
+  > DualSmallVectorTestTypes;
 
-TYPED_TEST_SUITE(DualSmallVectorsTest, DualSmallVectorTestTypes);
+TYPED_TEST_CASE(DualSmallVectorsTest, DualSmallVectorTestTypes);
 
 TYPED_TEST(DualSmallVectorsTest, MoveAssignment) {
   SCOPED_TRACE("MoveAssignTest-DualVectorTypes");
@@ -801,8 +823,8 @@ TYPED_TEST(DualSmallVectorsTest, MoveAssignment) {
   const Constructable *OrigDataPtr = this->otherVector.data();
 
   // Move-assign from the other vector.
-  this->theVector = std::move(
-      static_cast<SmallVectorImpl<Constructable> &>(this->otherVector));
+  this->theVector =
+    std::move(static_cast<SmallVectorImpl<Constructable>&>(this->otherVector));
 
   // Make sure we have the right result.
   this->assertValuesInOrder(this->theVector, 4u, 0, 1, 2, 3);
@@ -810,7 +832,7 @@ TYPED_TEST(DualSmallVectorsTest, MoveAssignment) {
   // Make sure the # of constructor/destructor calls line up. There
   // are two live objects after clearing the other vector.
   this->otherVector.clear();
-  EXPECT_EQ(Constructable::getNumConstructorCalls() - 4,
+  EXPECT_EQ(Constructable::getNumConstructorCalls()-4,
             Constructable::getNumDestructorCalls());
 
   // If the source vector (otherVector) was in small-mode, assert that we just
@@ -842,9 +864,12 @@ TEST(SmallVectorCustomTest, NoAssignTest) {
 
 struct MovedFrom {
   bool hasValue;
-  MovedFrom() : hasValue(true) {}
-  MovedFrom(MovedFrom &&m) : hasValue(m.hasValue) { m.hasValue = false; }
-  MovedFrom &operator=(MovedFrom &&m) {
+  MovedFrom() : hasValue(true) {
+  }
+  MovedFrom(MovedFrom&& m) : hasValue(m.hasValue) {
+    m.hasValue = false;
+  }
+  MovedFrom &operator=(MovedFrom&& m) {
     hasValue = m.hasValue;
     m.hasValue = false;
     return *this;
@@ -1019,7 +1044,6 @@ TEST(SmallVectorTest, DefaultInlinedElements) {
   EXPECT_EQ(NestedV[0][0][0], 42);
 }
 
-/*
 TEST(SmallVectorTest, InitializerList) {
   SmallVector<int, 2> V1 = {};
   EXPECT_TRUE(V1.empty());
@@ -1037,7 +1061,6 @@ TEST(SmallVectorTest, InitializerList) {
   V2.insert(V2.begin() + 1, 5);
   EXPECT_TRUE(makeArrayRef(V2).equals({4, 5, 3, 2}));
 }
-*/
 
 template <class VectorT>
 class SmallVectorReferenceInvalidationTest : public SmallVectorTestBase {
@@ -1072,8 +1095,8 @@ protected:
 using SmallVectorReferenceInvalidationTestTypes =
     ::testing::Types<SmallVector<int, 3>, SmallVector<Constructable, 3>>;
 
-TYPED_TEST_SUITE(SmallVectorReferenceInvalidationTest,
-                 SmallVectorReferenceInvalidationTestTypes);
+TYPED_TEST_CASE(SmallVectorReferenceInvalidationTest,
+                SmallVectorReferenceInvalidationTestTypes);
 
 TYPED_TEST(SmallVectorReferenceInvalidationTest, PushBack) {
   // Note: setup adds [1, 2, ...] to V until it's at capacity in small mode.
@@ -1359,8 +1382,8 @@ using SmallVectorInternalReferenceInvalidationTestTypes =
     ::testing::Types<SmallVector<std::pair<int, int>, 3>,
                      SmallVector<std::pair<Constructable, Constructable>, 3>>;
 
-TYPED_TEST_SUITE(SmallVectorInternalReferenceInvalidationTest,
-                 SmallVectorInternalReferenceInvalidationTestTypes);
+TYPED_TEST_CASE(SmallVectorInternalReferenceInvalidationTest,
+                SmallVectorInternalReferenceInvalidationTestTypes);
 
 TYPED_TEST(SmallVectorInternalReferenceInvalidationTest, EmplaceBack) {
   // Note: setup adds [1, 2, ...] to V until it's at capacity in small mode.

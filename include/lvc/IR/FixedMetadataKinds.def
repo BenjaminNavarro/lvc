@@ -1,0 +1,44 @@
+/*===-- FixedMetadataKinds.def - Fixed metadata kind IDs -------*- C++ -*-=== *\
+|*
+|* Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
+|* See https://llvm.org/LICENSE.txt for license information.
+|* SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+|*
+\*===----------------------------------------------------------------------===*/
+
+#ifndef LVC_FIXED_MD_KIND
+#error "LVC_FIXED_MD_KIND(EnumID, Name, Value) is not defined."
+#endif
+
+LVC_FIXED_MD_KIND(MD_dbg, "dbg", 0)
+LVC_FIXED_MD_KIND(MD_tbaa, "tbaa", 1)
+LVC_FIXED_MD_KIND(MD_prof, "prof", 2)
+LVC_FIXED_MD_KIND(MD_fpmath, "fpmath", 3)
+LVC_FIXED_MD_KIND(MD_range, "range", 4)
+LVC_FIXED_MD_KIND(MD_tbaa_struct, "tbaa.struct", 5)
+LVC_FIXED_MD_KIND(MD_invariant_load, "invariant.load", 6)
+LVC_FIXED_MD_KIND(MD_alias_scope, "alias.scope", 7)
+LVC_FIXED_MD_KIND(MD_noalias, "noalias", 8)
+LVC_FIXED_MD_KIND(MD_nontemporal, "nontemporal", 9)
+LVC_FIXED_MD_KIND(MD_mem_parallel_loop_access,
+                    "llvm.mem.parallel_loop_access", 10)
+LVC_FIXED_MD_KIND(MD_nonnull, "nonnull", 11)
+LVC_FIXED_MD_KIND(MD_dereferenceable, "dereferenceable", 12)
+LVC_FIXED_MD_KIND(MD_dereferenceable_or_null, "dereferenceable_or_null", 13)
+LVC_FIXED_MD_KIND(MD_make_implicit, "make.implicit", 14)
+LVC_FIXED_MD_KIND(MD_unpredictable, "unpredictable", 15)
+LVC_FIXED_MD_KIND(MD_invariant_group, "invariant.group", 16)
+LVC_FIXED_MD_KIND(MD_align, "align", 17)
+LVC_FIXED_MD_KIND(MD_loop, "llvm.loop", 18)
+LVC_FIXED_MD_KIND(MD_type, "type", 19)
+LVC_FIXED_MD_KIND(MD_section_prefix, "section_prefix", 20)
+LVC_FIXED_MD_KIND(MD_absolute_symbol, "absolute_symbol", 21)
+LVC_FIXED_MD_KIND(MD_associated, "associated", 22)
+LVC_FIXED_MD_KIND(MD_callees, "callees", 23)
+LVC_FIXED_MD_KIND(MD_irr_loop, "irr_loop", 24)
+LVC_FIXED_MD_KIND(MD_access_group, "llvm.access.group", 25)
+LVC_FIXED_MD_KIND(MD_callback, "callback", 26)
+LVC_FIXED_MD_KIND(MD_preserve_access_index, "llvm.preserve.access.index", 27)
+LVC_FIXED_MD_KIND(MD_vcall_visibility, "vcall_visibility", 28)
+LVC_FIXED_MD_KIND(MD_noundef, "noundef", 29)
+LVC_FIXED_MD_KIND(MD_annotation, "annotation", 30)

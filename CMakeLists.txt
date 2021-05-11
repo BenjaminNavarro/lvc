@@ -21,19 +21,17 @@ if(MSVC)
   set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS TRUE)
 endif()
 
+file(
+  GLOB_RECURSE
+  LVC_SOURCE_FILES
+  CONFIGURE_DEPENDS
+  source/*.cpp
+)
+
 add_library(
     lvc_lvc
-    include/lvc/Compiler.h
-    include/lvc/DataTypes.h
-    include/lvc/ErrorHandling.h
-    include/lvc/iterator_range.h
     include/lvc/lvc.h
-    include/lvc/MathExtras.h
-    include/lvc/MemAlloc.h
-    include/lvc/SmallVector.h
-    include/lvc/type_traits.h
-    source/SmallVector.cpp
-    source/ErrorHandling.cpp
+    ${LVC_SOURCE_FILES}
 )
 add_library(lvc::lvc ALIAS lvc_lvc)
 

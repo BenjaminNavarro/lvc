@@ -1,6 +1,49 @@
 #ifndef LVC_LVC_H
 #define LVC_LVC_H
 
-#include <lvc/SmallVector.h>
+#include <lvc/ADT/Any.h>
+#include <lvc/ADT/ArrayRef.h>
+#include <lvc/ADT/BitVector.h>
+#include <lvc/ADT/Bitfields.h>
+#include <lvc/ADT/DenseMap.h>
+#include <lvc/ADT/DenseSet.h>
+#include <lvc/ADT/EnumeratedArray.h>
+#include <lvc/ADT/FoldingSet.h>
+#include <lvc/ADT/ImmutableList.h>
+#include <lvc/ADT/ImmutableMap.h>
+#include <lvc/ADT/ImmutableSet.h>
+#include <lvc/ADT/IntervalMap.h>
+#include <lvc/ADT/IntrusiveRefCntPtr.h>
+#include <lvc/ADT/MapVector.h>
+#include <lvc/ADT/Optional.h>
+#include <lvc/ADT/PackedVector.h>
+#include <lvc/ADT/PointerEmbeddedInt.h>
+#include <lvc/ADT/PointerIntPair.h>
+#include <lvc/ADT/PointerSumType.h>
+#include <lvc/ADT/PointerUnion.h>
+#include <lvc/ADT/PriorityQueue.h>
+#include <lvc/ADT/PriorityWorklist.h>
+#include <lvc/ADT/ScopeExit.h>
+#include <lvc/ADT/ScopedHashTable.h>
+#include <lvc/ADT/Sequence.h>
+#include <lvc/ADT/SetOperations.h>
+#include <lvc/ADT/SetVector.h>
+#include <lvc/ADT/SmallBitVector.h>
+#include <lvc/ADT/SmallPtrSet.h>
+#include <lvc/ADT/SmallSet.h>
+#include <lvc/ADT/SmallString.h>
+#include <lvc/ADT/SmallVector.h>
+#include <lvc/ADT/SparseBitVector.h>
+#include <lvc/ADT/SparseMultiSet.h>
+#include <lvc/ADT/SparseSet.h>
+#include <lvc/ADT/StringMap.h>
+#include <lvc/ADT/StringRef.h>
+#include <lvc/ADT/StringSet.h>
+#include <lvc/ADT/StringSwitch.h>
+#include <lvc/ADT/TinyPtrVector.h>
+#include <lvc/ADT/Triple.h>
+#include <lvc/ADT/Twine.h>
+#include <lvc/ADT/TypeSwitch.h>
+#include <lvc/ADT/UniqueVector.h>
 
-#endif
+#endif // LVC_LVC_H

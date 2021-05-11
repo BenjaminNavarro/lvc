@@ -1,0 +1,46 @@
+/*===- llvm/Config/AsmPrinters.def - LLVM Assembly Printers -----*- C++ -*-===*\
+|*                                                                            *|
+|* Part of the LLVM Project, under the Apache License v2.0 with LLVM          *|
+|* Exceptions.                                                                *|
+|* See https://llvm.org/LICENSE.txt for license information.                  *|
+|* SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception                    *|
+|*                                                                            *|
+|*===----------------------------------------------------------------------===*|
+|*                                                                            *|
+|* This file enumerates all of the assembly-language printers                 *|
+|* supported by this build of LLVM. Clients of this file should define        *|
+|* the LVC_ASM_PRINTER macro to be a function-like macro with a              *|
+|* single parameter (the name of the target whose assembly can be             *|
+|* generated); including this file will then enumerate all of the             *|
+|* targets with assembly printers.                                            *|
+|*                                                                            *|
+|* The set of targets supported by LLVM is generated at configuration         *|
+|* time, at which point this header is generated. Do not modify this          *|
+|* header directly.                                                           *|
+|*                                                                            *|
+\*===----------------------------------------------------------------------===*/
+
+#ifndef LVC_ASM_PRINTER
+#  error Please define the macro LVC_ASM_PRINTER(TargetName)
+#endif
+
+LVC_ASM_PRINTER(AArch64)
+LVC_ASM_PRINTER(AMDGPU)
+LVC_ASM_PRINTER(ARM)
+LVC_ASM_PRINTER(AVR)
+LVC_ASM_PRINTER(BPF)
+LVC_ASM_PRINTER(Hexagon)
+LVC_ASM_PRINTER(Lanai)
+LVC_ASM_PRINTER(Mips)
+LVC_ASM_PRINTER(MSP430)
+LVC_ASM_PRINTER(NVPTX)
+LVC_ASM_PRINTER(PowerPC)
+LVC_ASM_PRINTER(RISCV)
+LVC_ASM_PRINTER(Sparc)
+LVC_ASM_PRINTER(SystemZ)
+LVC_ASM_PRINTER(WebAssembly)
+LVC_ASM_PRINTER(X86)
+LVC_ASM_PRINTER(XCore)
+
+
+#undef LVC_ASM_PRINTER
